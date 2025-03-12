@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Your Portfolio</h2>
+        <form id="portfolioForm" enctype="multipart/form-data">
+            <h3>Personal Information</h3>
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="text" id="contact" placeholder="Contact Info" required>
+            <textarea id="bio" placeholder="Short Bio" required></textarea>
+            <input type="file" id="image" accept="image/*">
+
+            <h3>Academic Background</h3>
+            <input type="text" id="institution" placeholder="Institution Name" required>
+            <input type="text" id="degree" placeholder="Degree" required>
+            <input type="text" id="year" placeholder="Year" required>
+            <input type="text" id="grade" placeholder="Grade" required>
+            
+            <h3>Skills</h3>
+            <input type="text" id="softSkills" placeholder="Soft Skills (comma separated)" required>
+            <input type="text" id="techSkills" placeholder="Technical Skills (comma separated)" required>
+            
+            <h3>Work Experience</h3>
+            <input type="text" id="company" placeholder="Company Name" required>
+            <input type="text" id="duration" placeholder="Job Duration" required>
+            <textarea id="responsibilities" placeholder="Job Responsibilities" required></textarea>
+            
+            <h3>Projects/Publications</h3>
+            <input type="text" id="projectTitle" placeholder="Project/Publication Title" required>
+            <textarea id="projectDesc" placeholder="Description" required></textarea>
+            
+            <button type="submit" id="generateBtn">Generate Portfolio</button>
+        </form>
+
+        <!-- This section will be shown after the form is submitted -->
+        <div id="pdfButtonContainer" style="display:none;">
+            <button id="downloadPdf">Download PDF</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
