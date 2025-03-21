@@ -1,109 +1,147 @@
-document.getElementById('portfolioForm').addEventListener('submit', function (event) {
-    event.preventDefault();  // Prevent the form from submitting
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("portfolioForm");
+    const pdfButtonContainer = document.getElementById("pdfButtonContainer");
+    const editButton = document.getElementById("editPortfolio");
+    const downloadPdfButton = document.getElementById("downloadPdf");
 
-    // Gather form data
-    const name = document.getElementById('name').value;
-    const contact = document.getElementById('contact').value;
-    const bio = document.getElementById('bio').value;
-    const image = document.getElementById('image').files[0];
-    const institution = document.getElementById('institution').value;
-    const degree = document.getElementById('degree').value;
-    const year = document.getElementById('year').value;
-    const grade = document.getElementById('grade').value;
-    const softSkills = document.getElementById('softSkills').value;
-    const techSkills = document.getElementById('techSkills').value;
-    const company = document.getElementById('company').value;
-    const duration = document.getElementById('duration').value;
-    const responsibilities = document.getElementById('responsibilities').value;
-    const projectTitle = document.getElementById('projectTitle').value;
-    const projectDesc = document.getElementById('projectDesc').value;
+    let imageDataUrl = "";
 
-    // Prepare data to send to the server
-    
-    // Function to handle form submission
-    async function submitForm() {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('contact', contact);
-        formData.append('bio', bio);
-        if (image) formData.append('image', image);
-        formData.append('institution', institution);
-        formData.append('degree', degree);
-        formData.append('year', year);
-        formData.append('grade', grade);
-        formData.append('softSkills', softSkills);
-        formData.append('techSkills', techSkills);
-        formData.append('company', company);
-        formData.append('duration', duration);
-        formData.append('responsibilities', responsibilities);
-        formData.append('projectTitle', projectTitle);
-        formData.append('projectDesc', projectDesc);
-
-        try {
-            const response = await fetch('/submit', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-            if (response.ok) {
-                alert('Form submitted successfully!');
-                console.log('PDF URL:', result.pdfUrl);
-            } else {
-                alert('Error submitting form');
-            }
-        } catch (error) {
-            console.error('Submission error:', error);
+    document.getElementById("image").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById("imagePreview");
+                preview.src = e.target.result;
+                preview.style.display = "block";
+                imageDataUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
+    });
+
+    function addSection(containerId, entryHtml) {
+        const container = document.getElementById(containerId);
+        const newEntry = document.createElement("div");
+        newEntry.innerHTML = entryHtml;
+
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.classList.add("remove-btn");
+        removeButton.addEventListener("click", function () {
+            container.removeChild(newEntry);
+        });
+
+        newEntry.appendChild(removeButton);
+        container.appendChild(newEntry);
     }
 
-    submitForm(); // Call the async function
-    
-    // Hide the form after submission
-    document.getElementById('portfolioForm').style.display = 'none';
+    document.getElementById("addAcademic").addEventListener("click", function () {
+        addSection("academicContainer", `
+            <div class="academic-entry">
+                <input type="text" name="institution" placeholder="Institution Name" required>
+                <input type="text" name="degree" placeholder="Degree" required>
+                <input type="text" name="year" placeholder="Year" required>
+                <input type="text" name="grade" placeholder="Grade" required>
+            </div>
+        `);
+    });
 
-    // Show the "Download PDF" button
-    document.getElementById('pdfButtonContainer').style.display = 'block';
+    document.getElementById("addSkills").addEventListener("click", function () {
+        addSection("skillsContainer", `
+        <div class="skills-entry">
+            <input type="text" name="softSkills" placeholder="Soft Skills" required>
+            <input type="text" name="techSkills" placeholder="Technical Skills" required>
+        </div>
+        `);
+    });
 
-    // Implement the PDF generation logic (using jsPDF library)
-    document.getElementById('downloadPdf').addEventListener('click', function() {
-        // Use jsPDF to generate the PDF
+    document.getElementById("addWork").addEventListener("click", function () {
+        addSection("workContainer", `
+            <div class="work-entry">
+                <input type="text" name="company" placeholder="Company Name" required>
+                <input type="text" name="duration" placeholder="Job Duration" required>
+                <textarea name="responsibilities" placeholder="Job Responsibilities" required></textarea>
+            </div>
+        `);
+    });
+
+    document.getElementById("addProject").addEventListener("click", function () {
+        addSection("projectsContainer", `
+            <div class="project-entry">
+                <input type="text" name="projectTitle" placeholder="Project/Publication Title" required>
+                <textarea name="projectDesc" placeholder="Description" required></textarea>
+            </div>
+        `);
+    });
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        form.style.display = "none";
+        pdfButtonContainer.style.display = "block";
+    });
+
+    editButton.addEventListener("click", function () {
+        form.style.display = "block";
+        pdfButtonContainer.style.display = "none";
+    });
+
+    downloadPdfButton.addEventListener("click", function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // Set the title and content for the PDF
-        doc.setFontSize(16);
-        doc.text(`Portfolio of ${name}`, 10, 10);
+        doc.setFillColor(230, 230, 250);
+        doc.rect(0, 0, 210, 297, "F");
 
-        doc.setFontSize(12);
-        doc.text(`Name: ${name}`, 10, 20);
-        doc.text(`Contact Info: ${contact}`, 10, 30);
-        doc.text(`Bio: ${bio}`, 10, 40);
-        doc.text(`Institution: ${institution}`, 10, 50);
-        doc.text(`Degree: ${degree}`, 10, 60);
-        doc.text(`Year: ${year}`, 10, 70);
-        doc.text(`Grade: ${grade}`, 10, 80);
-        doc.text(`Soft Skills: ${softSkills}`, 10, 90);
-        doc.text(`Technical Skills: ${techSkills}`, 10, 100);
-        doc.text(`Company: ${company}`, 10, 110);
-        doc.text(`Job Duration: ${duration}`, 10, 120);
-        doc.text(`Responsibilities: ${responsibilities}`, 10, 130);
-        doc.text(`Project Title: ${projectTitle}`, 10, 140);
-        doc.text(`Project Description: ${projectDesc}`, 10, 150);
+        doc.setLineWidth(2);
+        doc.setDrawColor(44, 62, 80);
+        doc.rect(10, 10, 190, 277);
 
-        // Add image if it was uploaded
-        if (image) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imgData = e.target.result;
-                doc.addImage(imgData, 'JPEG', 10, 160, 50, 50);
-                // Save the PDF after adding image
-                doc.save('portfolio.pdf');
-            };
-            reader.readAsDataURL(image);
-        } else {
-            // If no image was uploaded, just save the PDF
-            doc.save('portfolio.pdf');
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.setTextColor(30, 144, 255);
+        doc.text("Portfolio", 80, 30);
+
+        if (imageDataUrl) {
+            doc.addImage(imageDataUrl, 'JPEG', 140, 20, 50, 50);
         }
+
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Personal Information", 20, 50);
+        doc.line(20, 52, 90, 52);
+        doc.setFont("helvetica", "normal");
+
+        const name = document.getElementById("name").value;
+        const contact = document.getElementById("contact").value;
+        const bio = document.getElementById("bio").value;
+
+        doc.text(`Name: ${name}`, 20, 60);
+        doc.text(`Contact: ${contact}`, 20, 70);
+        doc.text(`Bio: ${bio}`, 20, 80);
+
+        let yOffset = 100;
+        function addSectionToPDF(title, selector) {
+            doc.setFont("helvetica", "bold");
+            doc.text(title, 20, yOffset);
+            doc.line(20, yOffset + 2, 90, yOffset + 2);
+            doc.setFont("helvetica", "normal");
+            yOffset += 10;
+
+            document.querySelectorAll(selector).forEach(entry => {
+                entry.querySelectorAll("input, textarea").forEach(input => {
+                    doc.text(`${input.placeholder}: ${input.value}`, 20, yOffset);
+                    yOffset += 10;
+                });
+                yOffset += 5;
+            });
+        }
+
+        addSectionToPDF("Academic Background", ".academic-entry");
+        addSectionToPDF("Skills", ".skills-entry");
+        addSectionToPDF("Work Experience", ".work-entry");
+        addSectionToPDF("Projects/Publications", ".project-entry");
+
+        doc.save(`${name}_portfolio.pdf`);
     });
 });
