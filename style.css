@@ -1,86 +1,122 @@
-/* General Styles */
+/* General Styling */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  box-sizing: border-box;
-  height: 80vh; /* Set a height limit */
-  overflow-y: auto; /* Add scrolling if content exceeds the container's height */
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-h3 {
-  color: #333;
-  margin-top: 20px;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-button {
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-#pdfButtonContainer {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#downloadPdf {
-  background-color: #28a745;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-#downloadPdf:hover {
-  background-color: #218838;
-}
-
-input[type="file"] {
-  padding: 10px;
-}
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #4e1c1c, #3d2a5f);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Scrollable Container */
+  .container {
+    width: 80%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #ffd901, #54b15b);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 20px 90px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    color: rgb(0, 0, 0);
+    scrollbar-width: large;
+    scrollbar-color: #0609f0 #fbfcfd;
+  }
+  
+  /* Scrollbar for Webkit Browsers */
+  .container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .container::-webkit-scrollbar-thumb {
+    background: #5cfa00;
+    border-radius: 10px;
+  }
+  
+  .container::-webkit-scrollbar-track {
+    background: #2575fc;
+  }
+  
+  /* Headings */
+  h2, h3 {
+    color: #000000;
+    font-weight: 600;
+  }
+  
+  /* Form Elements */
+  input[type="text"], textarea, input[type="file"], button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 3px;
+    border: 2px solid #42772f;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Buttons */
+  button {
+    background-color: #ff0062;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  
+  button:hover {
+    background-color: #b93067;
+    transform: scale(1.05);
+  }
+  
+  /* Remove Button */
+  .remove-button {
+    background-color: #173aff;
+  }
+  
+  .remove-button:hover {
+    background-color: #6777d6;
+  }
+  
+  /* Image Preview Container */
+  #imagePreviewContainer {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  /* PDF Button Container */
+  #pdfButtonContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  #pdfButtonContainer button {
+    background-color: #4caf50;
+    border-radius: 5px;
+  }
+  
+  #pdfButtonContainer button:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    button {
+      font-size: 14px;
+    }
+  }
+  
