@@ -1,3 +1,110 @@
-<html>
-    Welcome to Index.html page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Generator</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js" defer></script> 
+</head>
+<body>
+    <div class="container">
+        <h2>Create Your Portfolio</h2>
+        
+        <form id="portfolioForm" action="/submit" method="POST" enctype="multipart/form-data">
+            <div class="image-upload">
+                <label for="image">Upload Picture:</label>
+                <input type="file" id="image" accept="image/*">
+                <img id="imagePreview" src="" alt="Preview" style="display:none; width: 100px; height: 100px; object-fit: cover;">
+            </div>
+
+            <h3>Personal Information</h3>
+            <input type="text" id="name" name="name" placeholder="Full Name" required>
+            <input type="text" id="contact" name="contact" placeholder="Contact Info" required>
+            <textarea id="bio" name="bio" placeholder="Short Bio" required></textarea>
+
+            <h3>Academic Background</h3>
+            <div id="academicContainer">
+                <div class="academic-entry">
+                    <input type="text" name="institution" placeholder="Institution Name" required>
+                    <input type="text" name="degree" placeholder="Degree" required>
+                    <input type="text" name="year" placeholder="Year" required>
+                    <input type="text" name="grade" placeholder="Grade" required>
+                </div>
+            </div>
+            <button type="button" id="addAcademic">Add More</button>
+
+            <h3>Skills</h3>
+            <div id="skillsContainer">
+                <input type="text" name="softSkills" placeholder="Soft Skills" required>
+                <input type="text" name="techSkills" placeholder="Technical Skills" required>
+            </div>
+            <button type="button" id="addSkills">Add More</button>
+
+            <h3>Work Experience</h3>
+            <div id="workContainer">
+                <div class="work-entry">
+                    <input type="text" name="company" placeholder="Company Name" required>
+                    <input type="text" name="duration" placeholder="Job Duration" required>
+                    <textarea name="responsibilities" placeholder="Job Responsibilities" required></textarea>
+                </div>
+            </div>
+            <button type="button" id="addWork">Add More</button>
+
+            <h3>Projects/Publications</h3>
+            <div id="projectsContainer">
+                <div class="project-entry">
+                    <input type="text" name="projectTitle" placeholder="Project/Publication Title" required>
+                    <textarea name="projectDesc" placeholder="Description" required></textarea>
+                </div>
+            </div>
+            <button type="button" id="addProject">Add More</button>
+            
+            <button type="submit" id="generateBtn">Generate Portfolio</button>
+        </form>
+
+        <!-- This section will be shown after the form is submitted -->
+        <div id="pdfButtonContainer" style="display:none;">
+            <button id="downloadPdf">Download PDF</button>
+            <button id="editPortfolio">Edit Portfolio</button>
+        </div>
+    </div>
+
+    <script>
+        // Image preview logic
+        document.getElementById('image').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('portfolioForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            const formData = new FormData(this); // Create FormData object with form data
+
+            fetch('/submit', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Portfolio submitted successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+        
+    </script>
+</body>
 </html>
